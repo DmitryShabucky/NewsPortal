@@ -46,7 +46,6 @@
 
 	# применяем функцию like()/dislike() к постам и комментариям
 31. post1.like()
-
 32. post2.dislike()
 33. Comment.objects.get(text='Bomb!!!').like()
 34. Comment.objects.get(text='Rubbish').dislike()
@@ -65,7 +64,7 @@
 39. from django.db.models.functions import TruncDate
 
 	# получаем лучший по рейтингу пост, включая username автора, дату публикации, рейтинг и заголовок
-40. Post.objects.annotate(date=TruncDate('create_date'),  username=F('author__user__username')).values('date', 'username', 'rate', 	'title') .order_by('-rate').first()
+40. Post.objects.annotate(date=TruncDate('create_date'), username=F('author__user__username')).values('date', 'username', 'rate', 'title') .order_by('-rate').first()
 
 	# получаем все комментарии с датой публикации, username, рейтингом и текстом к предыдущей статье
-41. Post.objects.order_by('-rate').first().comment_set.annotate(date=TruncDate('create_date'), username =   	F('user__username')).values('date', 'username', 'rate', 'text')
+41. Post.objects.order_by('-rate').first().comment_set.annotate(date=TruncDate('create_date'), username=F('user__username')).values('date', 'username', 'rate', 'text')
