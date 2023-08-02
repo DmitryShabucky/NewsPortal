@@ -20,6 +20,9 @@ class Author(models.Model):
 class Category(models.Model):
     name = models.CharField(max_length=255, unique=True)
 
+    def __str__(self):
+        return self.name.title()
+
 
 class Post(models.Model):
     article = 'AR'
@@ -37,6 +40,9 @@ class Post(models.Model):
     rate = models.IntegerField(default=0)
 
     category = models.ManyToManyField(Category, through='PostCategory')
+
+    def __str__(self):
+        return f"{self.get_position_display()}: {self.title}. Дата публикации: {self.create_date.date()}. {self.text}"
 
     def like(self):
         self.rate += 1
@@ -56,11 +62,14 @@ class PostCategory(models.Model):
 
 
 class Comment(models.Model):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     text = models.TextField()
     create_date = models.DateTimeField(auto_now_add=True)
     rate = models.IntegerField(default=0)
+
+    def __str__(self):
+        return self.text
 
     def like(self):
         self.rate += 1

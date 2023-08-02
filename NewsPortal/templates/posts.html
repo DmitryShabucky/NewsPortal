@@ -1,0 +1,32 @@
+
+{% extends 'flatpages/default.html' %}
+{% load custom_filter %}
+
+{% block title %}
+Post
+{% endblock title %}
+
+
+{% block content %}
+
+<table border="3", cellpadding="5", bgcolor="#faebd7">
+    <h1>Новости</h1>
+    <h1>{{ posts|length|censor}}</h1>
+    <tr>
+        <td><h2>Заголовок:</h2></td>
+        <td><h4>Дата публикации:</h4></td>
+        <td><h2>Текст:</h2></td>
+    </tr>
+
+
+        {% for pst in posts %}
+    <tr>
+        <td align='left'>{{ pst.title | censor }}</td>
+        <td align="center">{{ pst.create_date|date:'d M Y'}}</td>
+        <td align="left">{{ pst.text|truncatewords:20 | censor }}</td>
+    </tr>
+    {%endfor%}
+
+</table>
+<!--<h1>{{ posts }}</h1>-->
+{% endblock content %}
