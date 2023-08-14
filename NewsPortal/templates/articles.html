@@ -3,19 +3,15 @@
 {% load custom_tags %}
 
 {% block title %}
-Post
+Articles
 {% endblock title %}
 
 
 {% block content %}
 
-<h1>Статьи и новости</h1>
+<h1>Статьи</h1>
 
-
-{% if posts %}
-
-<h5>Количество статей: {{ posts|length}}</h5>
-
+{% if articles %}
 <table border="3" , cellpadding="5" , bgcolor="#faebd7">
 
     <tr bgcolor="black" style="color: bisque">
@@ -24,35 +20,18 @@ Post
         <td><h2>Содержание:</h2></td>
     </tr>
 
+    <h5>Количество: {{ articles|length}}</h5>
+    <hr>
 
-    {% for pst in posts %}
-    {% if pst.position == 'NW'%}
-
+    {% for art in articles %}
     <tr>
-
-        <td align='left'><a class="nav-link" href="/newsportal/news/{{pst.pk}}">{{ pst.title }}</a></td>
-        <td align="center">{{ pst.create_date|date:'d M Y'}}</td>
-        <td align="left"><a class="nav-link" href="/newsportal/news/{{pst.pk}}">{{ pst.text|truncatewords:20 }}</a></td>
-
+        <td align='left'><a class="nav-link" href="/newsportal/articles/{{art.pk}}">{{ art.title }}</a></td>
+        <td align="center">{{ art.create_date|date:'d M Y'}}</td>
+        <td align="left"><a class="nav-link" href="/newsportal/articles/{{art.pk}}">{{ art.text|truncatewords:20 }}</a></td>
     </tr>
-    {% else%}
-    <tr>
 
-        <td align='left'><a class="nav-link" href="/newsportal/articles/{{pst.pk}}">{{ pst.title }}</a></td>
-        <td align="center">{{ pst.create_date|date:'d M Y'}}</td>
-        <td align="left"><a class="nav-link" href="/newsportal/articles/{{pst.pk}}">{{ pst.text|truncatewords:20 }}</a>
-        </td>
-
-    </tr>
-    {%endif%}
-
-    {%endfor%}
-
+{%endfor%}
 </table>
-{% else %}
-<h2>Статья не найдена</h2>
-{% endif %}
-
 {% if page_obj.has_previous %}
 <a href="?{% url_replace page=1 %}">1</a>
 {% if page_obj.previous_page_number != 1 %}
@@ -60,7 +39,7 @@ Post
 <a href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>
 {% endif %}
 {% endif %}
-
+{% endif %}
 {{ page_obj.number }}
 
 {% if page_obj.has_next %}

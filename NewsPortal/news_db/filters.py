@@ -1,15 +1,39 @@
-from django_filters import FilterSet, ModelChoiceFilter
-from h11._abnf import field_name
+from django_filters import FilterSet, ModelMultipleChoiceFilter, DateFilter, CharFilter, DateFromToRangeFilter
 
-from  .models import Post, Category
+from django_filters.widgets import DateRangeWidget
+from django_filters import widgets
 
-Category = ModelChoiceFilter(
-    field_name= 'product_category__category',
-    queryset=Category.objects.all(),
-    lable='Category',
-    empty_lable= 'any',
-)
+from django.contrib.auth.models import User
+from .models import Post
+
+
 class PostFilter(FilterSet):
-    class Meta:
+
+    author = ModelMultipleChoiceFilter(
+        field_name= 'author__user',
+        queryset= User.objects.filter(author__isnull=False),
+        label= 'Автор',
+        conjoined= False,
+    )
+    create_date = DateFromToRangeFilter(
+        field_name='create_date',
+        lookup_expr='gt',
+        label='Опубликовано после',
+        widget=DateRangeWidget(attrs={'placeholder': 'YYYY/MM/DD'})
+    )
+    # create_date = DateFilter(
+    #     field_name='create_date',
+    #     lookup_expr='gt',
+    #     label= 'Опубликовано после',
+    # )
+   
+    title = CharFilter(
+        field_name='title',
+        lookup_expr='icontains',
+        label='Слово'
+    )
+    
+    class Meta():
         model = Post
-        fields = {}
+        fields= ['author', 'create_date', 'title']
+        

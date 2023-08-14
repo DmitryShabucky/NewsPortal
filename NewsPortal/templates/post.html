@@ -9,8 +9,23 @@ Posts
 
 
 {% block content %}
-<h2>{{ post.title  }}</h2>
+<h2>{{ post.title }}</h2>
 <h6>{{ post.create_date|date:'d M Y'}}</h6>
-{{post.text }}
+{{post.text}}
+
+<style>
+    .button-container {
+        white-space: nowrap;
+    }
+    .button-container a {
+        display: inline-block;
+        margin-right: 10px;
+    }
+</style>
+
+<div class="button-container">
+    <a href="{{ request.path }}/delete"><button>Удалить</button></a>
+    <a href="{{ request.path }}/edit"><button>Исправить</button></a>
+</div>
 
 {% endblock content %}

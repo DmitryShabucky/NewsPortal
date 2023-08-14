@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'news_db',
     'django.contrib.sites',
     'django.contrib.flatpages',
+    'import_export',
     'django_filters',
 ]
 

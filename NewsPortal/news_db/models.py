@@ -43,8 +43,7 @@ class Post(models.Model):
     category = models.ManyToManyField(Category, through='PostCategory')
 
     def __str__(self):
-        return (f"{self.get_position_display()}: {self.title.title()}. "
-                f"Дата публикации: {self.create_date.date()}. {self.text}")
+        return f"{self.get_position_display()}: {self.title}. Дата публикации: {self.create_date.date()}. {self.text}"
 
     def like(self):
         self.rate += 1
@@ -57,8 +56,8 @@ class Post(models.Model):
     def preview(self):
         return f"{self.text[:125:]}..."
 
-    def get_absolue_url(self):
-        return reverse('news', args=[int(self.pk)])
+    def get_absolute_url(self):
+        return reverse('post_details', args=[str(self.id)])
 
 
 class PostCategory(models.Model):

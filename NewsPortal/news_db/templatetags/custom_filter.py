@@ -7,7 +7,6 @@ censored_words = [
     'многие', 'продажи', 'могут', 'google', 'деньги', 'официально', 'ласточка', 'сайт', 'номер', 'производитель',
     'Jaecoo', 'сочетание',
 ]
-
 @register.filter()
 def censor(text):
     censored_text = []
