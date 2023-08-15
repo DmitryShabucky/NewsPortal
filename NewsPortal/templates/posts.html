@@ -31,7 +31,7 @@ Post
     <tr>
 
         <td align='left'><a class="nav-link" href="/newsportal/news/{{pst.pk}}">{{ pst.title }}</a></td>
-        <td align="center">{{ pst.create_date|date:'d M Y'}}</td>
+        <td align="center">{{ pst.create_date|date:'d M Y'}} | {{ pst.author.user.username }}</td>
         <td align="left"><a class="nav-link" href="/newsportal/news/{{pst.pk}}">{{ pst.text|truncatewords:20 }}</a></td>
 
     </tr>
@@ -39,7 +39,7 @@ Post
     <tr>
 
         <td align='left'><a class="nav-link" href="/newsportal/articles/{{pst.pk}}">{{ pst.title }}</a></td>
-        <td align="center">{{ pst.create_date|date:'d M Y'}}</td>
+        <td align="center">{{ pst.create_date|date:'d M Y'}} | {{ pst.author.user.username }}</td>
         <td align="left"><a class="nav-link" href="/newsportal/articles/{{pst.pk}}">{{ pst.text|truncatewords:20 }}</a>
         </td>
 

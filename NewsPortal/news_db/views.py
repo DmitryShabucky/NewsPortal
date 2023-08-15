@@ -27,7 +27,6 @@ class PostsList(ListView):
     #     return context
     
 class PostsListFilter(ListView):
-
     model = Post
     ordering = '-create_date'
     template_name = 'post_search.html'
@@ -44,10 +43,12 @@ class PostsListFilter(ListView):
         context['filterset'] = self.filterset
         return context
 
+
 class PostDetails(DetailView):
     model = Post
     template_name = 'post.html'
     context_object_name = 'post'
+
 
 class NewsDetails(DetailView):
     model = Post

@@ -1,10 +1,10 @@
-from django_filters import FilterSet, ModelMultipleChoiceFilter, DateFilter, CharFilter, DateFromToRangeFilter
+from django_filters import FilterSet, ModelMultipleChoiceFilter, DateFilter, CharFilter
 
-from django_filters.widgets import DateRangeWidget
-from django_filters import widgets
-
+from django import forms
 from django.contrib.auth.models import User
 from .models import Post
+
+
 
 
 class PostFilter(FilterSet):
@@ -15,17 +15,13 @@ class PostFilter(FilterSet):
         label= 'Автор',
         conjoined= False,
     )
-    create_date = DateFromToRangeFilter(
-        field_name='create_date',
+    
+    create_date = DateFilter(
+        field_name= 'create_date',
+        widget=forms.DateInput(),
         lookup_expr='gt',
-        label='Опубликовано после',
-        widget=DateRangeWidget(attrs={'placeholder': 'YYYY/MM/DD'})
+        label= 'Опубликовано после',
     )
-    # create_date = DateFilter(
-    #     field_name='create_date',
-    #     lookup_expr='gt',
-    #     label= 'Опубликовано после',
-    # )
    
     title = CharFilter(
         field_name='title',
@@ -36,4 +32,6 @@ class PostFilter(FilterSet):
     class Meta():
         model = Post
         fields= ['author', 'create_date', 'title']
+
+        
         

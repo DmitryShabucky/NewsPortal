@@ -26,7 +26,7 @@ News
     {% for nws in news %}
     <tr>
         <td align='left'><a class="nav-link" href="/newsportal/news/{{nws.pk}}">{{ nws.title }}</a></td>
-        <td align="center">{{ nws.create_date|date:'d M Y'}}</td>
+        <td align="center">{{ nws.create_date|date:'d M Y'}} | {{ nws.author.user.username }}</td>
         <td align="left"><a class="nav-link" href="/newsportal/news/{{nws.pk}}">{{ nws.text|truncatewords:20 }}</a></td>
 
     </tr>
