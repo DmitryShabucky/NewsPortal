@@ -1,12 +1,18 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import (
-    ListView, DetailView, CreateView, UpdateView, DeleteView,
+    ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView,
 )
 from django.views.generic.edit import FormView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import Group
+
+
 from .forms import PostForm
-from .models import Post, Comment
+from .models import Post
 from .filters import PostFilter
+
 
 class PostsList(ListView):
 
@@ -96,12 +102,12 @@ class ArticleCreate(CreateView):
     form_class = PostForm
     template_name = 'article_create.html'
 
-class NewsEdit(UpdateView):
+class NewsEdit(LoginRequiredMixin, UpdateView):
     model = Post
     form_class = PostForm
     template_name = 'news_edit.html'
 
-class ArticleEdit(UpdateView):
+class ArticleEdit(LoginRequiredMixin,UpdateView):
     model = Post
     form_class = PostForm
     template_name = 'article_edit.html'
@@ -116,4 +122,20 @@ class ArticleDelete(DeleteView):
     success_url = reverse_lazy('articles_list')
     template_name = 'article_delete.html'
 
-# Create your views here.
+class IndexView(LoginRequiredMixin, TemplateView):
+    template_name = 'protect/index.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_not_author']= not self.request.user.groups.filter(name= 'author').exists()
+        return context
+@login_required
+def author_me(request):
+
+    user = request.user
+    author_group = Group.objects.get(name= 'author')
+    if not request.user.groups.filter(name= 'author').exists():
+        author_group.user_set.add(user)
+    return redirect('/')
+
+

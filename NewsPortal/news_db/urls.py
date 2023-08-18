@@ -1,7 +1,7 @@
 from django.urls import path
 from .views import (
     PostsList, PostDetails, PostsListFilter, ArticlesList, NewsList, NewsCreate, ArticleCreate, 
-    NewsDetails, ArticleDetails, NewsEdit, ArticleEdit, NewsDelete, ArticleDelete
+    NewsDetails, ArticleDetails, NewsEdit, ArticleEdit, NewsDelete, ArticleDelete,
 )
 
 
