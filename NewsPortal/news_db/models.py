@@ -10,9 +10,12 @@ class Author(models.Model):
     rate = models.IntegerField(default=0)
 
     def update_rating(self):
-        post_rateing = Post.objects.filter(author=self).aggregate(pr=Coalesce(Sum('rate'), 0))['pr']
-        comments_raiting = Comment.objects.filter(user=self.user).aggregate(cr=Coalesce(Sum('rate'), 0))['cr']
-        all_posts_rating = Comment.objects.filter(post__author=self).aggregate(apr=Coalesce(Sum('rate'), 0))['apr']
+        post_rateing = Post.objects.filter(author=self).aggregate(pr=Coalesce(Sum('rate'),
+                                                                              0))['pr']
+        comments_raiting = Comment.objects.filter(user=self.user).aggregate(cr=Coalesce(Sum('rate'),
+                                                                                        0))['cr']
+        all_posts_rating = Comment.objects.filter(post__author=self).aggregate(apr=Coalesce(Sum('rate'),
+                                                                                            0))['apr']
 
         self.rate = post_rateing * 3 + comments_raiting + all_posts_rating
         self.save()

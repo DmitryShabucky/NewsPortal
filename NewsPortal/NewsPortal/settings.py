@@ -39,7 +39,6 @@ INSTALLED_APPS = [
 
     # added apps
     'news_db',
-    'sign',
     'protect',
     'django.contrib.sites',
     'django.contrib.flatpages',
@@ -160,4 +159,4 @@ ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_VERIFICATION = 'none'
-ACCOUNT_FORMS = {'signup': 'sign.forms.CommonSignupForm'}
+ACCOUNT_FORMS = {'signup': 'news_db.forms.CommonSignupForm'}
