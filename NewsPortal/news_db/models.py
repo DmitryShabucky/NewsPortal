@@ -2,6 +2,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import Sum
 from django.db.models.functions import Coalesce
+from django.urls import reverse
 
 
 class Author(models.Model):
@@ -9,9 +10,12 @@ class Author(models.Model):
     rate = models.IntegerField(default=0)
 
     def update_rating(self):
-        post_rateing = Post.objects.filter(author=self).aggregate(pr=Coalesce(Sum('rate'), 0))['pr']
-        comments_raiting = Comment.objects.filter(user=self.user).aggregate(cr=Coalesce(Sum('rate'), 0))['cr']
-        all_posts_rating = Comment.objects.filter(post__author=self).aggregate(apr=Coalesce(Sum('rate'), 0))['apr']
+        post_rateing = Post.objects.filter(author=self).aggregate(pr=Coalesce(Sum('rate'),
+                                                                              0))['pr']
+        comments_raiting = Comment.objects.filter(user=self.user).aggregate(cr=Coalesce(Sum('rate'),
+                                                                                        0))['cr']
+        all_posts_rating = Comment.objects.filter(post__author=self).aggregate(apr=Coalesce(Sum('rate'),
+                                                                                            0))['apr']
 
         self.rate = post_rateing * 3 + comments_raiting + all_posts_rating
         self.save()
@@ -19,6 +23,9 @@ class Author(models.Model):
 
 class Category(models.Model):
     name = models.CharField(max_length=255, unique=True)
+
+    def __str__(self):
+        return self.name.title()
 
 
 class Post(models.Model):
@@ -38,6 +45,9 @@ class Post(models.Model):
 
     category = models.ManyToManyField(Category, through='PostCategory')
 
+    def __str__(self):
+        return f"{self.get_position_display()}: {self.title}. Дата публикации: {self.create_date.date()}. {self.text}"
+
     def like(self):
         self.rate += 1
         self.save()
@@ -49,6 +59,9 @@ class Post(models.Model):
     def preview(self):
         return f"{self.text[:125:]}..."
 
+    def get_absolute_url(self):
+        return reverse('post_details', args=[str(self.id)])
+
 
 class PostCategory(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
@@ -56,11 +69,14 @@ class PostCategory(models.Model):
 
 
 class Comment(models.Model):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     text = models.TextField()
     create_date = models.DateTimeField(auto_now_add=True)
     rate = models.IntegerField(default=0)
+
+    def __str__(self):
+        return self.text
 
     def like(self):
         self.rate += 1

@@ -1,0 +1,54 @@
+{% extends 'flatpages/default.html' %}
+{% load custom_filter %}
+{% load custom_tags %}
+
+{% block title %}
+Articles
+{% endblock title %}
+
+
+{% block content %}
+
+<h1>Статьи</h1>
+
+{% if articles %}
+<table border="3" , cellpadding="5" , bgcolor="#faebd7">
+
+    <tr bgcolor="black" style="color: bisque">
+        <td><h2>Заголовок:</h2></td>
+        <td><h4>Дата публикации:</h4></td>
+        <td><h2>Содержание:</h2></td>
+    </tr>
+
+    <h5>Количество: {{ articles|length}}</h5>
+    <hr>
+
+    {% for art in articles %}
+    <tr>
+        <td align='left'><a class="nav-link" href="/newsportal/articles/{{art.pk}}">{{ art.title }}</a></td>
+        <td align="center">{{ art.create_date|date:'d M Y'}} | {{ art.author.user.username }}</td>
+        <td align="left"><a class="nav-link" href="/newsportal/articles/{{art.pk}}">{{ art.text|truncatewords:20 }}</a></td>
+    </tr>
+
+{%endfor%}
+</table>
+{% if page_obj.has_previous %}
+<a href="?{% url_replace page=1 %}">1</a>
+{% if page_obj.previous_page_number != 1 %}
+...
+<a href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>
+{% endif %}
+{% endif %}
+{% endif %}
+{{ page_obj.number }}
+
+{% if page_obj.has_next %}
+<a href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
+{% if paginator.num_pages != page_obj.next_page_number %}
+...
+<a href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+<br>
+{% endif %}
+{% endif %}
+
+{% endblock content %}
