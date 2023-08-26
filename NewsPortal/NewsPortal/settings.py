@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # added apps
+
+    'django_apscheduler',
     'news_db.apps.NewsDbConfig',
     'protect',
     'django.contrib.sites',
@@ -50,11 +52,10 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     # ... include the providers you want to enable:
     'allauth.socialaccount.providers.google',
-    'django_apscheduler',
+
 ]
 
 APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"
-
 APSCHEDULER_RUN_NOW_TIMEOUT = 25  # Seconds
 
 MIDDLEWARE = [
@@ -135,7 +136,7 @@ TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
@@ -156,7 +157,7 @@ LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/newsportal'
 
 SITE_ID = 1
-SITE_URL = 'http://127.0.0.1:8000'
+SITE_URL = 'http://127.0.0.1:8000/newsportal'
 
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True

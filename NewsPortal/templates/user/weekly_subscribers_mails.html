@@ -9,10 +9,10 @@
 <ul>{% for post in posts %}
     {% if post.position == 'NW' %}
         <p>{{ post.preview }}</p>
-        <li> <a href="{{ link }}/news/{{ post.get_absolut_url }}"> {{ post.title }}</a></li>
+        <li> <a href="{{ link }}/news/{{ post.pk }}"> {{ post.title }}</a></li>
     {% else %}
         <p>{{ post.preview }}</p>
-        <li> <a href="{{ link }}/articles/{{ post.get_absolut_url }}"> {{ post.title }}</a></li>
+        <li> <a href="{{ link }}/articles/{{ post.pk }}"> {{ post.title }}</a></li>
     {%  endif%}
 {% endfor %}
 </ul>
