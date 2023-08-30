@@ -1,0 +1,32 @@
+{% extends 'flatpages/default.html' %}
+
+{% load custom_filter%}
+
+
+{% block title %}
+Posts
+{% endblock title %}
+
+
+{% block content %}
+<h2>{{ post.title }}</h2>
+<h6>{{ post.create_date|date:'d M Y'}}</h6>
+<h6>{{ post.author.user.username }}</h6>
+{{post.text}}
+<br>
+<style>
+    .button-container {
+        white-space: nowrap;
+    }
+    .button-container a {
+        display: inline-block;
+        margin-right: 10px;
+    }
+</style>
+<br>
+<div class="button-container">
+    <a href="{{ request.path }}/delete"><button>Удалить</button></a>
+    <a href="{{ request.path }}/edit"><button>Исправить</button></a>
+</div>
+<br>
+{% endblock content %}
