@@ -1,0 +1,70 @@
+	# запускаем Shell
+1. python manage.py shell
+
+	# импортируем все модели (так делать не стоит (импортировать все), но в данном случае терпимо)
+2. from news_db.models import *
+
+	# создаем двух “юзуров”
+3. u1 = User.objects.create_user(username = 'Kirill')
+4. u2 = User.objects.create_user(username = 'Olga')
+
+	# создаём два объекта модели Author
+5. a1 = Author.objects.create(user=u1)
+6. a2 = Author.objects.create(user=u2)
+
+	# создаём четыре категории в модели Category
+7. Category.objects.create(name='Спорт')
+8. Category.objects.create(name='Политика')
+9. Category.objects.create(name='Образование')
+10. Category.objects.create(name='Досуг')
+
+	# добавляем две статьи и одну новость в модели Post
+11. Post.objects.create(author=a1, title='Some title', text='Some text')
+12. Post.objects.create(author=a2, title='Another article title', text='Text text text')
+13. Post.objects.create(author=a1, position='NW',  title='News title', text='Sports News')
+
+	# присваиваем к новостям и статьям категории
+14. post1 = Post.objects.all()[0]
+15. post2 = Post.objects.all()[1]
+16. post3 = Post.objects.all()[2]
+17. cat1 = Category.objects.get(name='Досуг')
+18. cat2 = Category.objects.get(name='Спорт')
+19. cat3 = Category.objects.get(name = 'Образование')
+20. cat4 = Category.objects.get(name = 'Политика')
+21. post1.category.add(cat1)
+22. post1.category.add(cat3)
+23. post2.category.add(cat4)
+24. post3.category.add(cat2)
+
+	# создаем комментарии к постам
+25. Comment.objects.create(post=post1, user=u1, text='Fire!!!')
+26. Comment.objects.create(post=post2, user=u1, text='Bomb!!!')
+27. Comment.objects.create(post=post3, user=u1, text='Awesome!!!')
+28. Comment.objects.create(post=post3, user=u2, text='What a trash...')
+29. Comment.objects.create(post=post1, user=u2, text='Rubbish')
+30. Comment.objects.create(post=post2, user=u2, text='Hate this one')
+
+	# применяем функцию like()/dislike() к постам и комментариям
+31. post1.like()
+32. post2.dislike()
+33. Comment.objects.get(text='Bomb!!!').like()
+34. Comment.objects.get(text='Rubbish').dislike()
+
+	# смотрим рейтинг поста и комментария
+35. post3.rate
+36. Comment.objects.get(text='Rubbish').rate
+
+	# обновляем рейтинг пользователя
+37. a1.update_rating()
+
+	# выводим лучшего пользователя, используем annotate для создания Алиаса “username”
+38. Author.objects.annotate(username=F('user__username')).values('username', 'rate').order_by('-rate').first()
+
+	# импортируем TruncDate для вывода только даты из поля DateTimeFeild
+39. from django.db.models.functions import TruncDate
+
+	# получаем лучший по рейтингу пост, включая username автора, дату публикации, рейтинг и заголовок
+40. Post.objects.annotate(date=TruncDate('create_date'), username=F('author__user__username')).values('date', 'username', 'rate', 'title') .order_by('-rate').first()
+
+	# получаем все комментарии с датой публикации, username, рейтингом и текстом к предыдущей статье
+41. Post.objects.order_by('-rate').first().comment_set.annotate(date=TruncDate('create_date'), username=F('user__username')).values('date', 'username', 'rate', 'text')

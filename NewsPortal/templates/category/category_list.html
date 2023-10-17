@@ -1,0 +1,85 @@
+{% extends 'flatpages/default.html' %}
+{% load custom_filter %}
+{% load custom_tags %}
+
+{% block title %}
+    Category
+{% endblock title %}
+
+
+{% block content %}
+
+    <a><h1>Статьи и новости</h1></a>
+        {% if is_not_subscribed %}
+            <button style="background-color: #E7DAB8FF"><a style="color: black" href="{%  url 'subscribe' category.id %}">Подписаться</a></button>
+    {% endif %}
+    {% if is_subscribed %}
+        <button style="background-color: #E7DAB8FF" ><a style="color: black" href="{%  url 'unsubscribe' category.id %}">Отписаться</a></button>
+    {% endif %}
+
+
+    {% if category_list %}
+
+        <h5>Количество статей: {{ category_list|length }}</h5>
+
+<table border="3" , cellpadding="5" , bgcolor="#faebd7">
+
+    <tr bgcolor="black" style="color: bisque">
+        <td><h4>Категория</h4></td>
+        <td><h2>Заголовок:</h2></td>
+        <td><h2>Содержание:</h2></td>
+        <td><h4>Дата публикации:</h4></td>
+    </tr>
+
+
+    {% for pst in category_list %}
+    {% if pst.position == 'NW'%}
+
+    <tr>
+        <td align="left">{% for category in pst.category.all %}
+            <a style="color: #6a1a21" href="{% url 'categories_list' category.id %}">{{ category }}</a>
+        {% endfor %}</td>
+        <td align='left'><a class="nav-link" href="/newsportal/news/{{pst.pk}}">{{ pst.title }}</a></td>
+        <td align="left"><a class="nav-link" href="/newsportal/news/{{pst.pk}}">{{ pst.text|truncatewords:20 }}</a></td>
+        <td align="center">{{ pst.create_date|date:'d M Y'}} | {{ pst.author.user.username }}</td>
+
+    </tr>
+    {% else%}
+    <tr>
+
+        <td align='left'><a class="nav-link" href="/newsportal/articles/{{pst.pk}}">{{ pst.title }}</a></td>
+        <td align="center">{{ pst.create_date|date:'d M Y'}} | {{ pst.author.user.username }}</td>
+        <td align="left"><a class="nav-link" href="/newsportal/articles/{{pst.pk}}">{{ pst.text|truncatewords:20 }}</a>
+        </td>
+
+    </tr>
+    {%endif%}
+
+    {%endfor%}
+
+</table>
+    {% else %}
+        <h2>Статья не найдена</h2>
+    {% endif %}
+
+    {% if page_obj.has_previous %}
+        <a href="?{% url_replace page=1 %}">1</a>
+        {% if page_obj.previous_page_number != 1 %}
+            ...
+            <a href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>
+        {% endif %}
+    {% endif %}
+
+    {{ page_obj.number }}
+
+    {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
+        {% if paginator.num_pages != page_obj.next_page_number %}
+            ...
+            <a href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+            <br>
+        {% endif %}
+    {% endif %}
+    <br>
+
+{% endblock content %}
