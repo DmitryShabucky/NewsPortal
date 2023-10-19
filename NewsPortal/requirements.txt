@@ -1,0 +1,7 @@
+django
+django_import_export
+django-filter
+django-apscheduler
+celery
+django-modeltranslation
+django-allauth

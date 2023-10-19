@@ -6,6 +6,23 @@ from django.db.models import Sum
 from django.db.models.functions import Coalesce
 from django.urls import reverse
 
+from django.utils.translation import gettext as _
+from django.utils.translation import pgettext_lazy  # импортируем «ленивый» геттекст с подсказкой
+
+
+class CategoryName(models.Model):
+    name = models.CharField(max_length=100,
+                            help_text=_('category name'))  # добавим переводящийся текст подсказку к полю
+
+
+class MyModel(models.Model):
+    name = models.CharField(max_length=100)
+    kind = models.ForeignKey(
+        CategoryName,
+        on_delete=models.CASCADE,
+        related_name='kinds',
+        verbose_name=pgettext_lazy('help text for MyModel model', 'This is the help text'),
+    )
 
 class Author(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)

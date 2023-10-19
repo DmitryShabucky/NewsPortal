@@ -1,7 +1,9 @@
 from django.core.cache import cache
+from django.http import HttpResponse
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
+from django.views import View
 from django.views.generic import (
     ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView,
 )
@@ -9,12 +11,18 @@ from django.views.generic import (
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
+from django.utils.translation import gettext as _
 
 from .forms import PostForm
 from .models import Post, Category
 from .filters import PostFilter
 
 
+# class Index(View):
+#     def get(self, request):
+#         string = _('Hello world')
+#
+#         return HttpResponse(string)
 class PostsList(ListView):
     model = Post
     ordering = '-create_date'
@@ -53,12 +61,12 @@ class PostDetails(DetailView):
     context_object_name = 'post'
     queryset = Post.objects.all()
 
-    def get_object(self, *args, **kwargs):
-        obj = cache.get(f'post - {self.kwargs["pk"]}', None)
-
-        if not obj:
-            obj = super().get_object(queryset=self.queryset)
-            cache.set(f'post - {self.kwargs["pk"]}', obj)
+    # def get_object(self, *args, **kwargs):
+    #     obj = cache.get(f'post - {self.kwargs["pk"]}', None)
+    #
+    #     if not obj:
+    #         obj = super().get_object(queryset=self.queryset)
+    #         cache.set(f'post - {self.kwargs["pk"]}', obj)
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['is_not_author']= not self.request.user.groups.filter(name= 'author').exists()
@@ -71,12 +79,12 @@ class NewsDetails(DetailView):
     template_name = 'post.html'
     context_object_name = 'post'
 
-    def get_object(self, *args, **kwargs):
-        obj = cache.get(f'post - {self.kwargs["pk"]}', None)
-
-        if not obj:
-            obj = super().get_object(queryset=self.queryset)
-            cache.set(f'post - {self.kwargs["pk"]}', obj)
+    # def get_object(self, *args, **kwargs):
+    #     obj = cache.get(f'post - {self.kwargs["pk"]}', None)
+    #
+    #     if not obj:
+    #         obj = super().get_object(queryset=self.queryset)
+    #         cache.set(f'post - {self.kwargs["pk"]}', obj)
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['is_not_author']= not self.request.user.groups.filter(name= 'author').exists()
@@ -88,12 +96,12 @@ class ArticleDetails(DetailView):
     template_name = 'post.html'
     context_object_name = 'post'
 
-    def get_object(self, *args, **kwargs):
-        obj = cache.get(f'post - {self.kwargs["pk"]}', None)
-
-        if not obj:
-            obj = super().get_object(queryset=self.queryset)
-            cache.set(f'post - {self.kwargs["pk"]}', obj)
+    # def get_object(self, *args, **kwargs):
+    #     obj = cache.get(f'post - {self.kwargs["pk"]}', None)
+    #
+    #     if not obj:
+    #         obj = super().get_object(queryset=self.queryset)
+    #         cache.set(f'post - {self.kwargs["pk"]}', obj)
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['is_not_author']= not self.request.user.groups.filter(name= 'author').exists()
